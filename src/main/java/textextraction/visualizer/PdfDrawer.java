@@ -524,7 +524,7 @@ public class PdfDrawer {
     try {
       // Close all the open PDPageContentStream objects. Start at 1 because of the dummy at the
       // start.
-      for (int i = 1; i < this.streams.size(); i++) {
+      for (int i = 0; i < this.streams.size(); i++) {
         try {
           this.streams.get(i).close();
         } catch (IOException e) {
