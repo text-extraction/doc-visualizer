@@ -1,6 +1,8 @@
 package textextraction.visualizer;
 
 import static org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode.APPEND;
+import static textextraction.visualizer.PdfDrawerSettings.DEFAULT_FONT;
+import static textextraction.visualizer.PdfDrawerSettings.FONTS;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
@@ -419,7 +421,7 @@ public class PdfDrawer {
    * @param x        The x-coordinate of the lower left of the text to draw.
    * @param y        The y-coordinate of the lower left of the text to draw.
    * @param text     The text to draw.
-   * @param font     The font of the text.
+   * @param fontName The font name.
    * @param fontSize The font size of the text.
    * @param color    The text color.
    * @param opacity  The text opacity; a value between 0 (= invisible) and 1 (= visible).
@@ -427,7 +429,7 @@ public class PdfDrawer {
    * @throws IllegalArgumentException If the validation of one of the arguments fails.
    * @throws IllegalStateException    If there is an error on drawing the text.
    */
-  public void drawText(int pageNum, float x, float y, String text, PDFont font, float fontSize,
+  public void drawText(int pageNum, float x, float y, String text, String fontName, float fontSize,
           Color color, float opacity) throws IllegalArgumentException, IllegalStateException {
     // Validate the page number.
     if (pageNum < 1) {
@@ -446,8 +448,8 @@ public class PdfDrawer {
     }
 
     // Validate the font.
-    if (font == null) {
-      throw new IllegalArgumentException("No font given.");
+    if (fontName == null) {
+      throw new IllegalArgumentException("No font name given.");
     }
 
     // Validate the color.
@@ -465,6 +467,8 @@ public class PdfDrawer {
     if (stream == null) {
       throw new IllegalStateException(String.format("Couldn't load page #%d.", pageNum));
     }
+
+    PDFont font = FONTS.containsKey(fontName) ? FONTS.get(fontName) : DEFAULT_FONT;
 
     try {
       // Try to draw the text.
